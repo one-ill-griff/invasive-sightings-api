@@ -179,5 +179,15 @@ app.get("/summary/by-species", async (req, res) => {
   }
 });
 
+app.get("/", (_req, res) => {
+  res
+    .status(200)
+    .type("text")
+    .send(
+      "Invasive Sightings API is running. Try /health, /sightings/bbox, /sightings/near, /sightings/within, /summary/by-species"
+    );
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API running on port ${port}`));
+
