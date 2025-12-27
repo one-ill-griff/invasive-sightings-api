@@ -88,9 +88,13 @@ app.get("/sightings/bbox", async (req, res) => {
     const { rows } = await pool.query(sql, nums);
     const features = rows.map(rowToFeature);
     res.json(featuresToCollection(features));
-  } catch (err) {
+    } catch (err) {
     console.error("BBOX ERROR:", err);
-    res.status(500).json({ error: "Server error querying bbox." });
+    res.status(500).json({
+      error: "Server error querying bbox.",
+      details: err.message,
+      code: err.code || null
+    });
   }
 });
 
@@ -201,5 +205,6 @@ app.get("/", (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API running on port ${port}`));
+
 
 
