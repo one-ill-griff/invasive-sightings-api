@@ -203,8 +203,17 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/version", (_req, res) => {
+  res.json({
+    node: process.version,
+    renderCommit: process.env.RENDER_GIT_COMMIT || null,
+    timestamp: new Date().toISOString()
+  });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API running on port ${port}`));
+
 
 
 
