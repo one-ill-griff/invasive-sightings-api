@@ -179,15 +179,27 @@ app.get("/summary/by-species", async (req, res) => {
   }
 });
 
-app.get("/", (_req, res) => {
-  res
-    .status(200)
-    .type("text")
-    .send(
-      "Invasive Sightings API is running. Try /health, /sightings/bbox, /sightings/near, /sightings/within, /summary/by-species"
-    );
+app.get("/", (req, res) => {
+  const base = `${req.protocol}://${req.get("host")}`;
+
+  const examples = {
+    health: `${base}/health`,
+    bbox_small: `${base}/sightings/bbox?minLon=-86.88&minLat=39.63&maxLon=-86.85&maxLat=39.65`,
+    bbox_wide: `${base}/sightings/bbox?minLon=-87&minLat=39&maxLon=-86&maxLat=40`,
+    near: `${base}/sightings/near?lon=-86.8651&lat=39.6412&radius_m=500`,
+    summary: `${base}/summary/by-species?minLon=-87&minLat=39&maxLon=-86&maxLat=40`,
+    within_note:
+      "POST /sightings/within requires a GeoJSON polygon in the request body (use Postman or PowerShell)."
+  };
+
+  res.status(200).json({
+    service: "invasive-sightings-api",
+    message: "API is running. Use these working example endpoints:",
+    examples
+  });
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`API running on port ${port}`));
+
 
